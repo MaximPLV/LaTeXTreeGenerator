@@ -1,0 +1,28 @@
+\begin{forest}
+  for tree={
+    minimum size=2em,
+    edge={-},
+    s sep+=10mm
+  }
+  [1
+    [2
+      [4
+        [8]
+        [9]
+      ]
+      [5
+        [11]
+      ]
+    ]
+    [3
+      [6
+        [12]
+        [13]
+      ]
+      [7
+        [14]
+        [15]
+      ]
+    ]
+  ]
+\end{forest}
