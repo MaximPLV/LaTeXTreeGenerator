@@ -1,12 +1,10 @@
 package org.example;
 
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 public class Edge extends Line {
-    private GraphNode start;
-    private GraphNode end;
+    private final GraphNode start;
+    private final GraphNode end;
 
     public Edge(GraphNode start, GraphNode end) {
         if (start == null || end == null) throw new IllegalArgumentException("Edge must have start node and end node");
