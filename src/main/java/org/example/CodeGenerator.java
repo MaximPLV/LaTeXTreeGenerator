@@ -4,53 +4,49 @@ public class CodeGenerator {
     private static final String nodeTemplate = """
             [%s]""";
 
-    private static final String nodeWithChildTemplate = """
+    private static final String nodeWithChildrenTemplate = """
             [%s
             %s
             %s
             ]""";
 
-    private static final String rootTemplate = """
-            [%s
-            %s
-            %s
-            ]
-            """;
-
     private static final String forestTemplate = """
+            ----------------------
             \\begin{forest}
               for tree={
                 minimum size=2em,
                 edge={-},
                 s sep+=10mm
               }
-            %s\\end{forest}
+            %s
+            \\end{forest}
+            ----------------------
             """;
 
-    public static String generate(String[][] nodes) {
-
-        for (int i = 0; i < nodes[nodes.length - 1].length; i++) {
-            if (nodes[nodes.length - 1][i] == null) continue;
-            nodes[nodes.length - 1][i] = String.format(nodeTemplate, nodes[nodes.length - 1][i]);
-        }
-
-        for (int i = nodes.length - 2; i > 0; i--) {
-            for (int j = 0; j < nodes[i].length; j++) {
-                String leftChildVal = nodes[i + 1][2 * j];
-                String rightChildVal = nodes[i + 1][2 * j + 1];
-                String leftChild = leftChildVal != null ? indent(nodes[i + 1][2 * j], i) : "";
-                String rightChild = rightChildVal != null ? indent(nodes[i + 1][2 * j + 1], i) : "";
-                nodes[i][j] = String.format(nodeWithChildTemplate, nodes[i][j], leftChild, rightChild);
-            }
-        }
-
-
-        String root = String.format(rootTemplate, nodes[0][0], indent(nodes[1][0], 1), indent(nodes[1][1], 1)).replaceAll("(?m)^", "  ");
-        root = root.replaceAll("(?m)^[\s]*\n", "");
-        return String.format(forestTemplate, root);
+    public static String generate(GraphNode root) {
+        String texTree = String.format(forestTemplate, generateTree(root));
+        return deleteEmptyLines(texTree);
     }
 
-    private static String indent(String text, int level) {
+    //currently only works with binary trees, but is theoretically extendable to multiple children
+    public static String generateTree(GraphNode root) {
+        if (root == null) return "";
+        String texTree = root.isLeaf() ?
+                String.format(nodeTemplate, root.getText()) :
+                String.format(
+                        nodeWithChildrenTemplate,
+                        root.getText(),
+                        generateTree(root.getChildren().get(0)),
+                        generateTree(root.getChildren().get(1))
+                );
+        return indent(texTree);
+    }
+
+    private static String indent(String text) {
         return text.replaceAll("(?m)^", "  ");
+    }
+
+    private static String deleteEmptyLines(String texTree) {
+        return texTree.replaceAll("(?m)^[ \t]*\n", ""); //(?m) for multiline mode
     }
 }
