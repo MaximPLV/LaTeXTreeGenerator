@@ -128,18 +128,23 @@ public class GraphNode extends Rectangle {
     public double getCenterX() {
         return getX() + getWidth()/2;
     }
+
     public double getCenterY() {
         return getY() + getHeight()/2;
     }
+
     public DoubleBinding centerXProperty() {
         return xProperty().add(widthProperty().divide(2));
     }
+
     public DoubleBinding centerYProperty() {
         return yProperty().add(heightProperty().divide(2));
     }
+
     public void setCenterX(double x) {
         setX(x - getWidth()/2);
     }
+
     public void setCenterY(double y) {
         setY(y - getHeight()/2);
     }
